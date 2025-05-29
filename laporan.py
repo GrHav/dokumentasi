@@ -22,7 +22,7 @@ Dataset ini berisi informasi pelanggan dari perusahaan telekomunikasi fiktif.
 
 # Data Preparation
 
-## Data Loading
+Melakukan import library
 """
 
 import pandas as pd
@@ -36,20 +36,35 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 
+"""## Data Loading
+
+Memasukkan kaggle.json untuk menggunakan api json
+"""
+
 from google.colab import files
 files.upload()
+
+"""memasukkan kaggle.json agar bisa digunakan"""
 
 !mkdir -p ~/.kaggle
 !mv kaggle.json ~/.kaggle/
 !chmod 600 ~/.kaggle/kaggle.json
 
+"""mendownload library kaggle"""
+
 !pip install kaggle
 
+"""mendownload dataset telco-customer-churn langsung dari kaggle"""
+
 !kaggle datasets download -d blastchar/telco-customer-churn
+
+"""membuka file zip yang telah di downloadkan"""
 
 import zipfile
 with zipfile.ZipFile("telco-customer-churn.zip", "r") as zip_ref:
     zip_ref.extractall("telco_data")
+
+"""membuka file csv yang telah di download"""
 
 df = pd.read_csv("telco_data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 df.head()
@@ -57,6 +72,8 @@ df.head()
 """Melihat apakah pengguna akan churn atau tidak berdasarkan distribusinya
 
 ## Exploratory Data Analysis
+
+Menampilkan distribusi fitur beserta churn
 """
 
 columns_to_plot = df.columns.tolist()
@@ -74,6 +91,11 @@ for col in columns_to_plot:
         plt.title(f'Distribution of {col} by Churn')
     plt.tight_layout()
     plt.show()
+
+"""Berdasarkan plot yang didapatkan diatas didapatkan kesimpulan bahwa churn dapat terjadi kapan saja tidak tergantung dari `monthly charges` atau `total charges`
+
+melakukan deteksi outlier dan menampilkannya pada kolom `total charges` dengan `monthly charges`
+"""
 
 def detect_and_visualize_outliers_iqr(df, column):
     """
@@ -107,7 +129,12 @@ df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
 df.dropna(subset=['TotalCharges'], inplace=True)
 detect_and_visualize_outliers_iqr(df.copy(), 'TotalCharges')
 
-"""## Data Cleaning"""
+"""Tidak ditemukan outlier pada kedua fitur tersebut
+
+## Data Cleaning
+
+Membersihkan data `total charges`. membuang data kosong, melakukan encode pada `churn`, menghapus `customerid`
+"""
 
 df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
 df.dropna(inplace=True)
@@ -115,7 +142,10 @@ df['Churn'] = df['Churn'].apply(lambda x: 1 if x == 'Yes' else 0)
 df.drop(['customerID'], axis=1, inplace=True)
 df = pd.get_dummies(df, drop_first=True)
 
-"""## Feature Scalling"""
+"""## Feature Scalling
+
+Melakukan scalling pada data dengan size test 20%
+"""
 
 X = df.drop('Churn', axis=1)
 y = df['Churn']
@@ -128,19 +158,446 @@ X_test_scaled = scaler.transform(X_test)
 """# Modeling
 
 ## Model 1: Logistic Regression
+
+Logistic Regression digunakan untuk klasifikasi biner, dan menghitung probabilitas suatu data termasuk ke dalam kelas positif (misalnya 1).
+
+Rumus matematis:
+
+𝑃
+(
+𝑦
+=
+1
+∣
+𝑋
+)
+=
+1
+1
++
+𝑒
+−
+(
+𝛽
+0
++
+𝛽
+1
+𝑥
+1
++
+𝛽
+2
+𝑥
+2
++
+⋯
++
+𝛽
+𝑛
+𝑥
+𝑛
+)
+P(y=1∣X)=
+1+e
+−(β
+0
+​
+ +β
+1
+​
+ x
+1
+​
+ +β
+2
+​
+ x
+2
+​
+ +⋯+β
+n
+​
+ x
+n
+​
+ )
+
+1
+​
+
+𝑋
+=
+(
+𝑥
+1
+,
+𝑥
+2
+,
+.
+.
+.
+,
+𝑥
+𝑛
+)
+X=(x
+1
+​
+ ,x
+2
+​
+ ,...,x
+n
+​
+ ): fitur input
+
+𝛽
+=
+(
+𝛽
+0
+,
+𝛽
+1
+,
+.
+.
+.
+,
+𝛽
+𝑛
+)
+β=(β
+0
+​
+ ,β
+1
+​
+ ,...,β
+n
+​
+ ): koefisien model
+
+Fungsi aktivasi yang digunakan adalah sigmoid:
+
+𝜎
+(
+𝑧
+)
+=
+1
+1
++
+𝑒
+−
+𝑧
+σ(z)=
+1+e
+−z
+
+1
+​
+
+Prediksi kelas:
+
+𝑦
+^
+=
+{
+1
+jika
+𝑃
+(
+𝑦
+=
+1
+∣
+𝑋
+)
+>
+0.5
+0
+jika
+𝑃
+(
+𝑦
+=
+1
+∣
+𝑋
+)
+≤
+0.5
+y
+^
+​
+ ={
+1
+0
+​
+  
+jika P(y=1∣X)>0.5
+jika P(y=1∣X)≤0.5
+​
 """
 
 log_reg = LogisticRegression(max_iter=1000)
 log_reg.fit(X_train_scaled, y_train)
 y_pred_lr = log_reg.predict(X_test_scaled)
 
-"""## Model 2: Random Forest"""
+"""## Model 2: Random Forest
+
+Random Forest adalah ensemble dari banyak decision tree, dan hasil prediksi ditentukan melalui voting (klasifikasi) atau rata-rata (regresi).
+
+Prediksi klasifikasi:
+
+𝑦
+^
+=
+mode
+(
+𝑇
+1
+(
+𝑋
+)
+,
+𝑇
+2
+(
+𝑋
+)
+,
+.
+.
+.
+,
+𝑇
+𝑘
+(
+𝑋
+)
+)
+y
+^
+​
+ =mode(T
+1
+​
+ (X),T
+2
+​
+ (X),...,T
+k
+​
+ (X))
+𝑇
+𝑖
+(
+𝑋
+)
+* T
+i
+​
+ (X): prediksi dari decision tree ke-
+𝑖
+i
+
+* Hasil akhir adalah mayoritas voting dari semua pohon.
+
+Karakteristik:
+
+* Menggunakan bagging (bootstrap aggregation)
+
+* Mengurangi overfitting dibanding single decision tree
+"""
 
 rf = RandomForestClassifier(random_state=42)
 rf.fit(X_train, y_train)
 y_pred_rf = rf.predict(X_test)
 
-"""## Model 3: XGBoost"""
+"""## Model 3: XGBoost
+
+XGBoost membangun model secara bertahap menggunakan boosting, menambahkan pohon baru untuk memperbaiki kesalahan pohon sebelumnya.
+
+Rumus umum (untuk regresi):
+
+𝑦
+^
+𝑖
+(
+𝑡
+)
+=
+𝑦
+^
+𝑖
+(
+𝑡
+−
+1
+)
++
+𝜂
+⋅
+𝑓
+𝑡
+(
+𝑥
+𝑖
+)
+y
+^
+​
+  
+i
+(t)
+​
+ =
+y
+^
+​
+  
+i
+(t−1)
+​
+ +η⋅f
+t
+​
+ (x
+i
+​
+ )
+𝑦
+^
+𝑖
+(
+𝑡
+)
+y
+^
+​
+  
+i
+(t)
+​
+ : prediksi pada iterasi ke-
+𝑡
+t
+
+𝑓
+𝑡
+f
+t
+​
+ : pohon ke-
+𝑡
+t
+
+𝜂
+η: learning rate
+
+Objektif:
+
+Obj
+=
+∑
+𝑖
+=
+1
+𝑛
+𝑙
+(
+𝑦
+𝑖
+,
+𝑦
+^
+𝑖
+)
++
+∑
+𝑡
+=
+1
+𝑇
+Ω
+(
+𝑓
+𝑡
+)
+Obj=
+i=1
+∑
+n
+​
+ l(y
+i
+​
+ ,
+y
+^
+​
+  
+i
+​
+ )+
+t=1
+∑
+T
+​
+ Ω(f
+t
+​
+ )
+𝑙
+l: loss function (misalnya MSE, log loss)
+
+Ω
+(
+𝑓
+𝑡
+)
+Ω(f
+t
+​
+ ): regularisasi untuk mengontrol kompleksitas pohon:
+
+Ω
+(
+𝑓
+)
+=
+𝛾
+𝑇
++
+1
+2
+𝜆
+∑
+𝑗
+=
+1
+𝑇
+𝑤
+𝑗
+2
+Ω(f)=γT+
+2
+1
+​
+ λ
+j=1
+∑
+T
+​
+ w
+j
+2
+​
+"""
 
 xgb = XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42)
 xgb.fit(X_train, y_train)
@@ -148,6 +605,7 @@ y_pred_xgb = xgb.predict(X_test)
 
 """# Evaluation
 
+Melakukan evaluasi data dari hasil yang didapatkan
 """
 
 def evaluate_model(name, y_true, y_pred):
@@ -167,6 +625,8 @@ results = [
 
 results_df = pd.DataFrame(results)
 results_df.sort_values(by="F1-Score", ascending=False)
+
+"""Berdasarkan evaluasi metrik, dibuatkan visualisasi sebagai perbandingan antar model"""
 
 metrics = ['Accuracy', 'Precision', 'Recall', 'F1-Score']
 models = results_df['Model']
