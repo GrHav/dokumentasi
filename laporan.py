@@ -72,6 +72,32 @@ df.head()
 """Melihat apakah pengguna akan churn atau tidak berdasarkan distribusinya
 
 ## Exploratory Data Analysis
+"""
+
+df.info()
+
+"""Tidak ada nilai kosong pada dataset ini.
+Variabel Utama yang akan dipakai adalah `Churn`
+Variabel pendukung seperti
+- gender
+- seniorcitizen
+- partner
+- dependents
+- tenure
+- phoneservice
+- multiplelines
+- internetservice
+- onlinesecurity
+- onlinebackup
+- deviceprotection
+- techsupport
+- streamingtv
+- steamingmovies
+- contract
+- paperlessbilling
+- paymentmethod
+- monthlycharges
+- totalcharges
 
 Menampilkan distribusi fitur beserta churn
 """
@@ -92,7 +118,7 @@ for col in columns_to_plot:
     plt.tight_layout()
     plt.show()
 
-"""Berdasarkan plot yang didapatkan diatas didapatkan kesimpulan bahwa churn dapat terjadi kapan saja tidak tergantung dari `monthly charges` atau `total charges`
+"""Berdasarkan plot yang didapatkan diatas didapatkan kesimpulan bahwa churn dapat terjadi kapan saja tidak tergantung dari `monthly charges` atau `total charges`. Dan dari data masih belum ditemukan pasti penyebab churn dapat terjadi.
 
 melakukan deteksi outlier dan menampilkannya pada kolom `total charges` dengan `monthly charges`
 """
