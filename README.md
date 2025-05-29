@@ -39,7 +39,7 @@ Jumlah data: 7043 baris dan 21 kolom.
 #### Variabel utama:
 
 - Demografi: gender, SeniorCitizen, Partner, Dependents
-- Layanan: PhoneService, InternetService, StreamingTV, StreamingMovies, dll.
+- Layanan: PhoneService, InternetService, StreamingTV, StreamingMovies, OnlineSecurity, DeviceProtection, TechSupport.
 - Keuangan & kontrak: MonthlyCharges, TotalCharges, Contract, PaymentMethod
 - Target: Churn (Yes/No)
 
