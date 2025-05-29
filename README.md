@@ -52,10 +52,12 @@ Jumlah data: 7043 baris dan 21 kolom.
 ## Data Preparation
 
 Langkah-langkah preprocessing:
-- Menghapus nilai null pada TotalCharges (hasil konversi dari string ke float).
-- Konversi kolom TotalCharges menjadi numerik karena ada karakter kosong.
-- One-hot encoding pada fitur kategorikal agar bisa diproses oleh algoritma ML.
+- Konversi 'TotalCharges' menjadi data numerik
+- Proses dropna() setelah konversi 'TotalCharges'
+- Encoding kolom target 'Churn' dari 'Yes'/'No' menjadi nilai numerik (0/1).
+- Penghapusan kolom 'customerID'.
 - Standarisasi fitur numerik menggunakan StandardScaler agar memiliki skala yang sama.
+- Melakukan split data dengan test size sebesar 20%
 
 Alasan Data Preparation:
 - Model ML tidak dapat memproses data kategorikal secara langsung.
