@@ -109,6 +109,10 @@ Model yang digunakan:
 Formula F1-score: F1 = 2*(Precision*Recall/Precision+Recall)
 
 Hasil Evaluasi:
+Model                    F1-Score
+1. Logistic Regression : 0.5635
+2. Random Forest : 0.5410
+3. XGBoost : 0.5139
 - Model Logistic Regression memiliki F1-score tertinggi (0.563504), diikuti oleh Random Forest (0.541033), dan kemudian XGBoost (0.513869)
 - Dikarenakan F1-score tertinggi adalah Logistic Regression maka model yang lebih baik digunakan dalam kasus ini adalah Logistic Regression
 
