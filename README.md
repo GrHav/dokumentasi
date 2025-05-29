@@ -111,3 +111,8 @@ Formula F1-score: F1 = 2*(Precision*Recall/Precision+Recall)
 Hasil Evaluasi:
 - Model Logistic Regression memiliki F1-score tertinggi (0.563504), diikuti oleh Random Forest (0.541033), dan kemudian XGBoost (0.513869)
 - Dikarenakan F1-score tertinggi adalah Logistic Regression maka model yang lebih baik digunakan dalam kasus ini adalah Logistic Regression
+
+## Referensi
+1. Amin, A., Anwar, S., Adnan, A., et al. (2019). Customer churn prediction in the telecommunication sector using a rough set approach. Neural Computing and Applications.
+2. Géron, A. (2019). Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow (2nd Edition). O'Reilly Media.
+3. Kaggle Dataset. (n.d.). Telco Customer Churn. Retrieved from https://www.kaggle.com/datasets/blastchar/telco-customer-churn
