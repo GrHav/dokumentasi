@@ -159,451 +159,53 @@ X_test_scaled = scaler.transform(X_test)
 
 ## Model 1: Logistic Regression
 
-Logistic Regression digunakan untuk klasifikasi biner, dan menghitung probabilitas suatu data termasuk ke dalam kelas positif (misalnya 1).
+Cara Kerja
+- Logistic Regression adalah model klasifikasi linier yang digunakan untuk memprediksi probabilitas dari kelas target.
 
-Rumus matematis:
+Fungsi utama
+- z = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ
 
-𝑃
-(
-𝑦
-=
-1
-∣
-𝑋
-)
-=
-1
-1
-+
-𝑒
-−
-(
-𝛽
-0
-+
-𝛽
-1
-𝑥
-1
-+
-𝛽
-2
-𝑥
-2
-+
-⋯
-+
-𝛽
-𝑛
-𝑥
-𝑛
-)
-P(y=1∣X)=
-1+e
-−(β
-0
-​
- +β
-1
-​
- x
-1
-​
- +β
-2
-​
- x
-2
-​
- +⋯+β
-n
-​
- x
-n
-​
- )
-
-1
-​
-
-𝑋
-=
-(
-𝑥
-1
-,
-𝑥
-2
-,
-.
-.
-.
-,
-𝑥
-𝑛
-)
-X=(x
-1
-​
- ,x
-2
-​
- ,...,x
-n
-​
- ): fitur input
-
-𝛽
-=
-(
-𝛽
-0
-,
-𝛽
-1
-,
-.
-.
-.
-,
-𝛽
-𝑛
-)
-β=(β
-0
-​
- ,β
-1
-​
- ,...,β
-n
-​
- ): koefisien model
-
-Fungsi aktivasi yang digunakan adalah sigmoid:
-
-𝜎
-(
-𝑧
-)
-=
-1
-1
-+
-𝑒
-−
-𝑧
-σ(z)=
-1+e
-−z
-
-1
-​
-
-Prediksi kelas:
-
-𝑦
-^
-=
-{
-1
-jika
-𝑃
-(
-𝑦
-=
-1
-∣
-𝑋
-)
->
-0.5
-0
-jika
-𝑃
-(
-𝑦
-=
-1
-∣
-𝑋
-)
-≤
-0.5
-y
-^
-​
- ={
-1
-0
-​
-  
-jika P(y=1∣X)>0.5
-jika P(y=1∣X)≤0.5
-​
+Nilai z kemudian dipetakan ke rentang 0–1 menggunakan fungsi sigmoid:
+- P(y=1|x) = 1 / (1 + exp(-z))
+Probabilitas diklasifikasikan ke dalam label 0 atau 1 berdasarkan threshold (biasanya 0.5).
 """
 
 log_reg = LogisticRegression(max_iter=1000)
 log_reg.fit(X_train_scaled, y_train)
 y_pred_lr = log_reg.predict(X_test_scaled)
 
-"""## Model 2: Random Forest
+"""- max_iter adalah parameter yang menentukan jumlah maksimum iterasi yang digunakan oleh solver dalam proses optimasi model Logistic Regression.
 
-Random Forest adalah ensemble dari banyak decision tree, dan hasil prediksi ditentukan melalui voting (klasifikasi) atau rata-rata (regresi).
+## Model 2: Random Forest
 
-Prediksi klasifikasi:
-
-𝑦
-^
-=
-mode
-(
-𝑇
-1
-(
-𝑋
-)
-,
-𝑇
-2
-(
-𝑋
-)
-,
-.
-.
-.
-,
-𝑇
-𝑘
-(
-𝑋
-)
-)
-y
-^
-​
- =mode(T
-1
-​
- (X),T
-2
-​
- (X),...,T
-k
-​
- (X))
-𝑇
-𝑖
-(
-𝑋
-)
-* T
-i
-​
- (X): prediksi dari decision tree ke-
-𝑖
-i
-
-* Hasil akhir adalah mayoritas voting dari semua pohon.
-
-Karakteristik:
-
-* Menggunakan bagging (bootstrap aggregation)
-
-* Mengurangi overfitting dibanding single decision tree
+Cara Kerja
+- Random Forest adalah algoritma ensemble berbasis banyak pohon keputusan.
+- Setiap pohon dilatih menggunakan subset acak dari data (bootstrap sampling).
+- Prediksi akhir berdasarkan voting mayoritas (klasifikasi) atau rata-rata (regresi) dari semua pohon.
 """
 
 rf = RandomForestClassifier(random_state=42)
 rf.fit(X_train, y_train)
 y_pred_rf = rf.predict(X_test)
 
-"""## Model 3: XGBoost
+"""- random_state memastikan bahwa proses pelatihan model menjadi reproducible (hasil yang konsisten tiap kali dijalankan).
 
-XGBoost membangun model secara bertahap menggunakan boosting, menambahkan pohon baru untuk memperbaiki kesalahan pohon sebelumnya.
+## Model 3: XGBoost
 
-Rumus umum (untuk regresi):
-
-𝑦
-^
-𝑖
-(
-𝑡
-)
-=
-𝑦
-^
-𝑖
-(
-𝑡
-−
-1
-)
-+
-𝜂
-⋅
-𝑓
-𝑡
-(
-𝑥
-𝑖
-)
-y
-^
-​
-  
-i
-(t)
-​
- =
-y
-^
-​
-  
-i
-(t−1)
-​
- +η⋅f
-t
-​
- (x
-i
-​
- )
-𝑦
-^
-𝑖
-(
-𝑡
-)
-y
-^
-​
-  
-i
-(t)
-​
- : prediksi pada iterasi ke-
-𝑡
-t
-
-𝑓
-𝑡
-f
-t
-​
- : pohon ke-
-𝑡
-t
-
-𝜂
-η: learning rate
-
-Objektif:
-
-Obj
-=
-∑
-𝑖
-=
-1
-𝑛
-𝑙
-(
-𝑦
-𝑖
-,
-𝑦
-^
-𝑖
-)
-+
-∑
-𝑡
-=
-1
-𝑇
-Ω
-(
-𝑓
-𝑡
-)
-Obj=
-i=1
-∑
-n
-​
- l(y
-i
-​
- ,
-y
-^
-​
-  
-i
-​
- )+
-t=1
-∑
-T
-​
- Ω(f
-t
-​
- )
-𝑙
-l: loss function (misalnya MSE, log loss)
-
-Ω
-(
-𝑓
-𝑡
-)
-Ω(f
-t
-​
- ): regularisasi untuk mengontrol kompleksitas pohon:
-
-Ω
-(
-𝑓
-)
-=
-𝛾
-𝑇
-+
-1
-2
-𝜆
-∑
-𝑗
-=
-1
-𝑇
-𝑤
-𝑗
-2
-Ω(f)=γT+
-2
-1
-​
- λ
-j=1
-∑
-T
-​
- w
-j
-2
-​
+Cara Kerja
+- XGBoost adalah algoritma boosting berbasis pohon yang melatih pohon berturut-turut untuk memperbaiki kesalahan dari model sebelumnya.
+- Menggunakan residual error dari prediksi sebelumnya sebagai target untuk pohon berikutnya.
+- Menggabungkan boosting dan regularisasi untuk meningkatkan performa dan menghindari overfitting.
 """
 
 xgb = XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42)
 xgb.fit(X_train, y_train)
 y_pred_xgb = xgb.predict(X_test)
 
-"""# Evaluation
+"""- Logloss (logarithmic loss) adalah metrik yang mengukur seberapa dekat prediksi probabilitas dengan label sebenarnya.
+- random_state memastikan bahwa proses pelatihan model menjadi reproducible (hasil yang konsisten tiap kali dijalankan).
+
+# Evaluation
 
 Melakukan evaluasi data dari hasil yang didapatkan
 """
