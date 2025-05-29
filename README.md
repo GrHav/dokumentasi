@@ -116,6 +116,20 @@ Model                    F1-Score
 - Model Logistic Regression memiliki F1-score tertinggi (0.563504), diikuti oleh Random Forest (0.541033), dan kemudian XGBoost (0.513869)
 - Dikarenakan F1-score tertinggi adalah Logistic Regression maka model yang lebih baik digunakan dalam kasus ini adalah Logistic Regression
 
+### Menjawab Problem Statements
+1. Pelanggan yang berisiko tinggi untuk melakukan churn dapat diidentifikasi dengan membangun model klasifikasi berbasis machine learning. Dalam proyek ini, dilakukan beberapa tahapan:
+- Pra-pemrosesan data untuk membersihkan dan mengubah data ke format numerik.
+- Pelatihan model dengan menggunakan algoritma seperti Logistic Regression, Random Forest, dan XGBoost.
+- Evaluasi model dilakukan menggunakan F1-score, karena data bersifat tidak seimbang (imbalanced).
+Model dengan performa terbaik (Logistic Regression dalam kasus ini, dengan F1-score 0.5635) digunakan untuk memprediksi probabilitas churn setiap pelanggan. Pelanggan dengan probabilitas churn lebih tinggi dari ambang batas tertentu (misalnya 0.5) dikategorikan sebagai pelanggan berisiko tinggi, dan dapat menjadi target dari program retensi perusahaan.
+
+2. Berdasarkan analisis feature importance dan koefisien dari model:
+- Contract: Pelanggan dengan kontrak bulanan lebih mungkin untuk churn dibandingkan pelanggan dengan kontrak jangka panjang.
+- Tenure (masa berlangganan): Pelanggan dengan masa langganan yang lebih pendek cenderung lebih berisiko untuk churn.
+- MonthlyCharges: Tagihan bulanan yang tinggi berkorelasi dengan kemungkinan churn yang lebih besar.
+- InternetService dan TechSupport: Pelanggan dengan layanan internet DSL/cable dan yang tidak memiliki dukungan teknis juga menunjukkan kecenderungan lebih tinggi untuk berhenti.
+Model Random Forest dan XGBoost secara eksplisit juga menunjukkan fitur-fitur di atas sebagai fitur penting dalam menentukan label churn.
+
 ## Referensi
 1. Amin, A., Anwar, S., Adnan, A., et al. (2019). Customer churn prediction in the telecommunication sector using a rough set approach. Neural Computing and Applications.
 2. Géron, A. (2019). Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow (2nd Edition). O'Reilly Media.
