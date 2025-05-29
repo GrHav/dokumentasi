@@ -28,7 +28,7 @@ Amin, A., Anwar, S., Adnan, A., et al. (2019). Customer churn prediction in the 
 - Evaluasi model menggunakan metrik F1-score, karena data tidak seimbang (imbalanced dataset) antara pelanggan churn dan non-churn.
 
 ## Data Understanding
-Dataset: Telco Customer Churn - (Kaggle)[https://www.kaggle.com/datasets/blastchar/telco-customer-churn]
+Dataset: Telco Customer Churn - [Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
 
 Dataset ini berisi informasi pelanggan dari perusahaan telekomunikasi fiktif, termasuk demografi, layanan yang digunakan, informasi kontrak, dan label churn.
 
