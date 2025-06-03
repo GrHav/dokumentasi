@@ -124,6 +124,9 @@ Model                    F1-Score  Accuracy  Precision  Recall
 2. Random Forest : 0.5410    0.7853       0.6268      0.4759
 3. XGBoost : 0.5139     0.7633      0.5659       0.4706
 - Model Logistic Regression memiliki F1-score tertinggi (0.563504), diikuti oleh Random Forest (0.541033), dan kemudian XGBoost (0.513869)
+- Model Logistic Regression memiliki accuracy tertinggi (0.7875), diikuti oleh Random Forest (0.7853), dan kemudian XGBoost (0.7633)
+- Model Random Forest memiliki precision tertinggi (0.6268), diikuti oleh Logistic Regression (0.6206), dan kemudian XGBoost (0.5659)
+- Model Logistic Regression memiliki recall tertinggi (0.5160), diikuti oleh Random Forest (0.4759), dan kemudian XGBoost(0.4706)
 - Dikarenakan F1-score tertinggi adalah Logistic Regression maka model yang lebih baik digunakan dalam kasus ini adalah Logistic Regression
 
 ### Menjawab Problem Statements
