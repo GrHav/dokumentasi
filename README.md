@@ -39,9 +39,16 @@ Jumlah data: 7043 baris dan 21 kolom.
 #### Variabel utama:
 
 - Demografi: gender, SeniorCitizen, Partner, Dependents
-- Layanan: PhoneService, InternetService, StreamingTV, StreamingMovies, OnlineSecurity, DeviceProtection, TechSupport.
-- Keuangan & kontrak: MonthlyCharges, TotalCharges, Contract, PaymentMethod
+- Layanan: PhoneService, InternetService, StreamingTV, StreamingMovies, OnlineSecurity, DeviceProtection, TechSupport, multiplelines, onlinebackup, paperlessbilling.
+- Keuangan & kontrak: MonthlyCharges, TotalCharges, Contract, PaymentMethod, tenure
 - Target: Churn (Yes/No)
+
+### Penjelasan Variabel:
+
+- Pelanggan yang berhenti berlangganan dalam bulan terakhir – kolom ini disebut Churn
+- Layanan yang telah didaftarkan oleh setiap pelanggan – Phone, multiplelines, internet, online security, online protection, device protection, tech support, serta streaming TV dan movies
+- Informasi akun pelanggan – berapa lama mereka menjadi customer, contract, payment method, paperless billing, monthly charges, dan total charges
+- Informasi demografis tentang pelanggan – gender, age range, dan apakah mereka memiliki partners dan dependents
 
 #### Exploratory Data Analysis (EDA):
 
