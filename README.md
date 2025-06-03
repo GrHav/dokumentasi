@@ -59,11 +59,13 @@ Jumlah data: 7043 baris dan 21 kolom.
 
 Langkah-langkah preprocessing:
 - Konversi 'TotalCharges' menjadi data numerik
-- Proses dropna() setelah konversi 'TotalCharges'
+- Proses dropna() setelah konversi 'TotalCharges' untuk menghapus nilai yang kosong
 - Encoding kolom target 'Churn' dari 'Yes'/'No' menjadi nilai numerik (0/1).
 - Penghapusan kolom 'customerID'.
-- Standarisasi fitur numerik menggunakan StandardScaler agar memiliki skala yang sama.
+- Melakukan encode dengan pd.get_dummies() untuk mengubah fitur kategorikal menjadi numerik
+- Melakukan drop kolom churn karena churn akan digunakan sebagai variabel y
 - Melakukan split data dengan test size sebesar 20%
+- Standarisasi fitur numerik menggunakan StandardScaler agar memiliki skala yang sama.
 
 Alasan Data Preparation:
 - Model ML tidak dapat memproses data kategorikal secara langsung.
@@ -105,6 +107,7 @@ Model yang digunakan:
     - Menggabungkan boosting dan regularisasi untuk meningkatkan performa dan menghindari overfitting.
       - Logloss (logarithmic loss) adalah metrik yang mengukur seberapa dekat prediksi probabilitas dengan label sebenarnya.
       - random_state memastikan bahwa proses pelatihan model menjadi reproducible (hasil yang konsisten tiap kali dijalankan).
+      - use_label_encoder=false untuk mematikan penggunaan label encoder karena sudah diencode sebelumnya jadi tidak perlu melakukan encode lagi 
 
 ## Evaluation
 ### Metrik Evaluasi:
@@ -116,10 +119,10 @@ Model yang digunakan:
 Formula F1-score: F1 = 2*(Precision*Recall/Precision+Recall)
 
 Hasil Evaluasi:
-Model                    F1-Score
-1. Logistic Regression : 0.5635
-2. Random Forest : 0.5410
-3. XGBoost : 0.5139
+Model                    F1-Score  Accuracy  Precision  Recall 
+1. Logistic Regression : 0.5635    0.7875    0.6206     0.5160
+2. Random Forest : 0.5410    0.7853       0.6268      0.4759
+3. XGBoost : 0.5139     0.7633      0.5659       0.4706
 - Model Logistic Regression memiliki F1-score tertinggi (0.563504), diikuti oleh Random Forest (0.541033), dan kemudian XGBoost (0.513869)
 - Dikarenakan F1-score tertinggi adalah Logistic Regression maka model yang lebih baik digunakan dalam kasus ini adalah Logistic Regression
 
